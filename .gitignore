@@ -175,3 +175,4 @@ cython_debug/
 
 # Project stuff
 data
+fred_token.txt
