@@ -43,18 +43,15 @@ jobs:
           results/evaluation_metrics.csv
           results/plots/*.png
 
-    - name: Create release
+    - name: Set report date
+      run: echo "REPORT_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+
+    - name: Create release with report
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: mortgage-report-${{ github.run_number }}
-        name: "Weekly Mortgage Rate Report #${{ github.run_number }}"
+        tag_name: mortgage-report-${{ env.REPORT_DATE }}
+        name: "Mortgage Rate Report – ${{ env.REPORT_DATE }}"
         body_path: email_report.html
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    
-    - name: Upload release assets
-      uses: softprops/action-gh-release@v1
-      with:
         files: |
           results/evaluation_metrics.csv
           results/plots/*.png
