@@ -8,6 +8,19 @@ A machine learning project to predict 30-year fixed mortgage rates using economi
 
 This project uses various economic indicators and Federal Reserve data to predict future mortgage rates. It implements a Bayesian Ridge Regression model to capture uncertainties in predictions and relationships between different economic factors.
 
+## Sample Results (April 2025)
+
+Model performance on test data:
+
+| Model | RMSE | MAE | R² Score |
+|-------|------|-----|----------|
+| Bayesian Ridge Regression | 0.0707 | 0.0468 | 0.6664 |
+| Linear Regression | 0.0705 | 0.0469 | 0.6689 |
+
+Cross-validation results:
+- **Bayesian Ridge Regression** - Mean RMSE: 0.1066 (±0.0764)
+- **Linear Regression** - Mean RMSE: 0.1080 (±0.0808)
+
 ## Features
 
 - Data collection from Federal Reserve Economic Data (FRED)
