@@ -4,6 +4,8 @@ on:
   schedule:
     - cron: '0 0 * * 1'  # Runs at 00:00 on Monday
   workflow_dispatch:  # Allows manual trigger
+permissions:
+  contents: write
 
 jobs:
   predict_rates:
