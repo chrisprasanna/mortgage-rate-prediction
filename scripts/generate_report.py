@@ -4,17 +4,32 @@ from datetime import datetime
 def generate_release_report():
     # Read evaluation metrics from prediction results
     metrics_df = pd.read_csv('results/evaluation_metrics.csv')
+    prediction_df = pd.read_csv('results/next_week_prediction.csv')
+    
+    # Format prediction values
+    pred_data = prediction_df.iloc[0]
+    current_rate = f"{pred_data['current_rate']:.3f}%"
+    predicted_rate = f"{pred_data['predicted_rate']:.3f}%"
+    change = pred_data['predicted_change']
+    change_str = f"{'+' if change >= 0 else ''}{change:.3f}%"
     
     # Create markdown report using actual artifact paths
     markdown_content = f"""# Mortgage Rate Prediction Report
 Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
-## Latest Prediction Results
+## Next Week's Rate Prediction
 
-### Model Performance Metrics
+**Forecast for {pred_data['prediction_date']}:**
+- Current Rate: {current_rate}
+- Predicted Rate for Next Week: {predicted_rate}
+- Expected Change: {change_str}
+
+## Model Performance Metrics
+
+### Evaluation Results on Holdout Test Set
 {metrics_df.to_markdown(index=False)}
 
-## Visualizations
+## Visualizations for Holdout Test Set Results
 
 ### Actual vs Predicted Values
 ![Actual vs Predicted](results/plots/actual_vs_predicted.png)

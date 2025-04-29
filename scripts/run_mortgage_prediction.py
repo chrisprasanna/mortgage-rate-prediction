@@ -84,6 +84,28 @@ def main():
         model_name="Bayesian Ridge Regression",
         save_path=os.path.join(config.PLOTS_DIR, "predictions_over_last_10yrs.png")
     )
+
+    # Generate next week's prediction
+    latest_data = data.iloc[-1:]  # Get most recent data point
+    next_week_pred = models["Bayesian Ridge Regression"].predict(
+        latest_data.drop(columns=[config.TARGET_COLUMN, 'Date'])
+    )[0]
+    current_rate = latest_data['MORTGAGE30US'].values[0]
+    
+    # Save prediction results
+    prediction_results = {
+        'current_rate': current_rate,
+        'predicted_change': next_week_pred,
+        'predicted_rate': current_rate + next_week_pred,
+        'prediction_date': (datetime.now() + pd.DateOffset(weeks=1)).strftime('%Y-%m-%d')
+    }
+    
+    pd.DataFrame([prediction_results]).to_csv(
+        os.path.join(config.RESULTS_DIR, "next_week_prediction.csv"),
+        index=False
+    )
+
+    print(f"\nNext week's predicted mortgage rate: {prediction_results['predicted_rate']}")
     
     # Calculate and save evaluation metrics
     metrics_df = evaluator.evaluate_models(test_df)
