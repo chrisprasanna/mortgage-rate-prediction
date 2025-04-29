@@ -42,7 +42,7 @@ Cross-validation results:
 - Data collection from Federal Reserve Economic Data (FRED)
 - Automated weekly predictions
 - Time series analysis and visualization
-- Email reporting of predictions
+- Weekly GitHub releases with prediction reports
 - Economic indicators tracked:
   - 10-Year Treasury Yield
   - Federal Funds Rate
@@ -106,7 +106,11 @@ The project includes a GitHub Actions workflow that:
 - Runs every Monday at 00:00 UTC
 - Collects latest economic data
 - Generates new predictions
-- Sends an email report with results
+- Creates a GitHub release with:
+  - Weekly prediction report (HTML)
+  - Updated evaluation metrics
+  - Latest visualization plots
+- All reports are accessible through the repository's Releases page
 
 ## Model Details
 
