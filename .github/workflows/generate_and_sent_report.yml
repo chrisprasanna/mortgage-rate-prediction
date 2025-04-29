@@ -8,7 +8,7 @@ permissions:
   contents: write
 
 jobs:
-  predict_rates:
+  predict_and_report:
     runs-on: ubuntu-latest
     
     steps:
@@ -29,31 +29,30 @@ jobs:
         FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
       run: |
         python scripts/run_mortgage_prediction.py
-        
-    - name: Generate report
-      run: |
-        python scripts/generate_report.py
-        
-    - name: Upload report and plots
-      uses: actions/upload-artifact@v4
-      with:
-        name: weekly-mortgage-report
-        path: |
-          release_report.md
-          results/evaluation_metrics.csv
-          results/plots/*.png
 
     - name: Set report date
       run: echo "REPORT_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
 
-    - name: Create release with report
+    - name: Create Release Directory
+      run: |
+        mkdir -p release_assets
+        cp -r results/plots release_assets/
+        cp results/evaluation_metrics.csv release_assets/
+
+    - name: Generate report
+      env:
+        REPORT_DATE: ${{ env.REPORT_DATE }}
+      run: |
+        python scripts/generate_report.py
+
+    - name: Create release
       uses: softprops/action-gh-release@v1
       with:
         tag_name: mortgage-report-${{ env.REPORT_DATE }}
         name: "Mortgage Rate Report – ${{ env.REPORT_DATE }}"
         body_path: release_report.md
         files: |
-          results/evaluation_metrics.csv
-          results/plots/*.png
+          release_assets/plots/*
+          release_assets/evaluation_metrics.csv
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
