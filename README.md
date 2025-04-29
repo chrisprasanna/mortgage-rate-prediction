@@ -100,6 +100,50 @@ The project uses a Bayesian Ridge Regression model which:
 - Provides probabilistic predictions
 - Updates beliefs based on new data
 
+## Model Selection and Performance Analysis
+
+After evaluating 19 different regression models using PyCaret, Bayesian Ridge Regression and Linear Regression emerged as the top performers:
+
+### Why These Models Performed Best
+
+1. **Data Characteristics**
+   - The relationship between economic indicators and mortgage rates appears to be largely linear
+   - The features show moderate multicollinearity, which Bayesian Ridge handles well
+   - Weekly rate changes tend to be small and follow normal distribution patterns
+
+2. **Bayesian Ridge Advantages**
+   - Automatically determines optimal regularization
+   - Robust to multicollinearity in economic indicators
+   - Provides uncertainty estimates in predictions
+   - Excellent performance with small training time (0.02 seconds)
+
+3. **Model Comparison Insights**
+   - More complex models (Random Forest, XGBoost) showed worse performance (R² < 0.20)
+   - Tree-based models struggled, suggesting the relationship isn't highly nonlinear
+   - Simple linear models outperformed ensemble methods
+   - Regularized models (Ridge, Huber) performed well but not better than Bayesian Ridge
+
+### Feature Importance
+![feature_importance](results/plots/feature_importance.png)
+
+The Bayesian Ridge model identified several key economic indicators that influence mortgage rate changes:
+
+Top Positive Influencers:
+- MORTGAGE30US_2 (Strongest positive correlation)
+- CPILFESL (Core Consumer Price Index)
+- FEDFUNDS (Federal Funds Rate)
+- rolling_mean_3 (3-month rolling average)
+- DGS10 (10-Year Treasury Yield)
+- MORTGAGE30US_4 (4-month lagged mortgage rate)
+- M2SL (M2 Money Supply)
+
+Top Negative Influencers:
+- MORTGAGE30US (Current mortgage rate)
+- year 
+- GDP (Gross Domestic Product)
+- DFF (Effective Federal Funds Rate)
+- GNPCA (Real Gross National Product)
+
 ## Contributing
 
 1. Fork the repository
