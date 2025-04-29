@@ -324,8 +324,8 @@ class MortgageRateModelEvaluator:
         mae = mean_absolute_error(actual_rates[valid_mask], predicted_rates[valid_mask])
         
         stats_text = (
-            f'RMSE: {rmse:.4f}\n'
-            f'MAE: {mae:.4f}'
+            f'RMSE: {rmse:.2f}%\n'
+            f'MAE: {mae:.2f}%'
         )
         plt.text(0.02, 0.98, stats_text,
                 transform=plt.gca().transAxes,
