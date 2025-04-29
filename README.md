@@ -8,6 +8,22 @@ A machine learning project to predict 30-year fixed mortgage rates using economi
 
 This project uses various economic indicators and Federal Reserve data to predict future mortgage rates. It implements a Bayesian Ridge Regression model to capture uncertainties in predictions and relationships between different economic factors.
 
+- [Mortgage Rate Prediction](#mortgage-rate-prediction)
+  * [Overview](#overview)
+  * [Sample Results (April 2025)](#sample-results--april-2025-)
+  * [Features](#features)
+  * [Project Structure](#project-structure)
+  * [Setup](#setup)
+  * [Usage](#usage)
+    + [Running the Prediction Pipeline](#running-the-prediction-pipeline)
+    + [Automated Weekly Predictions](#automated-weekly-predictions)
+  * [Model Details](#model-details)
+  * [Model Selection and Performance Analysis](#model-selection-and-performance-analysis)
+    + [Why These Models Performed Best](#why-these-models-performed-best)
+    + [Feature Importance](#feature-importance)
+  * [Contributing](#contributing)
+  * [License](#license)
+
 ## Sample Results (April 2025)
 
 Model performance on test data:
@@ -129,7 +145,7 @@ After evaluating 19 different regression models using PyCaret, Bayesian Ridge Re
 The Bayesian Ridge model identified several key economic indicators that influence mortgage rate changes:
 
 Top Positive Influencers:
-- MORTGAGE30US_2 (Strongest positive correlation)
+- MORTGAGE30US_2 (2-month lagged mortgage rate)
 - CPILFESL (Core Consumer Price Index)
 - FEDFUNDS (Federal Funds Rate)
 - rolling_mean_3 (3-month rolling average)
