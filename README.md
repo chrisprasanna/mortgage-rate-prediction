@@ -97,4 +97,5 @@ The project uses a Bayesian Ridge Regression model which:
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under a modified GNU GPL v3 license for **non-commercial use only**.  
+See the [LICENSE](./LICENSE) file for full terms.
