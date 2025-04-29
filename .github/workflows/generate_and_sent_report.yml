@@ -4,6 +4,8 @@ on:
   schedule:
     - cron: '0 0 * * 1'  # Runs at 00:00 on Monday
   workflow_dispatch:  # Allows manual trigger
+permissions:
+  contents: write
 
 jobs:
   predict_rates:
@@ -28,24 +30,30 @@ jobs:
       run: |
         python scripts/run_mortgage_prediction.py
         
-    - name: Generate email report
+    - name: Generate report
       run: |
         python scripts/generate_email_report.py
         
-    - name: Send email
-      uses: dawidd6/action-send-mail@v3
+    - name: Upload report and plots
+      uses: actions/upload-artifact@v4
       with:
-        server_address: smtp.gmail.com
-        server_port: 465
-        username: ${{ secrets.EMAIL_USERNAME }}
-        password: ${{ secrets.EMAIL_PASSWORD }}
-        subject: Weekly Mortgage Rate Prediction Report
-        body: file://email_report.html
-        html_body: file://email_report.html
-        to: ${{ secrets.EMAIL_RECIPIENT }}
-        from: GitHub Actions
-        attachments: |
+        name: weekly-mortgage-report
+        path: |
+          email_report.html
           results/evaluation_metrics.csv
-          results/plots/actual_vs_predicted.png
-          results/plots/residuals.png
-          results/plots/feature_importance.png
+          results/plots/*.png
+
+    - name: Set report date
+      run: echo "REPORT_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+
+    - name: Create release with report
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: mortgage-report-${{ env.REPORT_DATE }}
+        name: "Mortgage Rate Report – ${{ env.REPORT_DATE }}"
+        body_path: email_report.html
+        files: |
+          results/evaluation_metrics.csv
+          results/plots/*.png
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
