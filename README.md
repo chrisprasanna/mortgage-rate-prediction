@@ -2,6 +2,8 @@
 
 A machine learning project to predict 30-year fixed mortgage rates using economic indicators and Federal Reserve data.
 
+![10yr_prediction](results/plots/predictions_over_last_10yrs.png)
+
 ## Overview
 
 This project uses various economic indicators and Federal Reserve data to predict future mortgage rates. It implements a Bayesian Ridge Regression model to capture uncertainties in predictions and relationships between different economic factors.
