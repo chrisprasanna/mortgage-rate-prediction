@@ -135,6 +135,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.conda
 
 # Spyder project settings
 .spyderproject
@@ -176,3 +177,4 @@ cython_debug/
 # Project stuff
 data
 fred_token.txt
+newsapi_token.txt

@@ -13,3 +13,6 @@ nltk==3.9.1
 GoogleNews==1.6.15
 newspaper3k==0.2.8
 xgboost
+transformers
+torch
+# pycaret
