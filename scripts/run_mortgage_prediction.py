@@ -72,6 +72,18 @@ def main():
         model_name="Bayesian Ridge Regression",
         save_path=os.path.join(config.PLOTS_DIR, "feature_importance.png")
     )
+
+    # Time series plot
+    # Filter data for the most recent 10 years
+    recent_data = data[data['Date'] >= (datetime.now() - pd.DateOffset(years=10)).strftime('%Y-%m-%d')]
+    
+    evaluator.plot_predictions_over_time(
+        df=recent_data,
+        rate_col='MORTGAGE30US',
+        change_col='MORTGAGE30US_diff',
+        model_name="Bayesian Ridge Regression",
+        save_path=os.path.join(config.PLOTS_DIR, "predictions_over_last_10yrs.png")
+    )
     
     # Calculate and save evaluation metrics
     metrics_df = evaluator.evaluate_models(test_df)

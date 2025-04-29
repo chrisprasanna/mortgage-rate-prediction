@@ -257,3 +257,85 @@ class MortgageRateModelEvaluator:
             print(f"Plot saved to {save_path}")
         else:
             plt.show()
+
+    def plot_predictions_over_time(self, df, rate_col='MORTGAGE30US', change_col='MORTGAGE30US_diff', 
+                                 predictions=None, model_name=None, save_path=None):
+        """
+        Create a time series plot comparing actual and predicted mortgage rates.
+        
+        Args:
+            df (pd.DataFrame): DataFrame containing dates, rates and rate changes
+            rate_col (str): Name of column containing actual mortgage rates
+            change_col (str): Name of column containing rate changes
+            predictions (array-like, optional): Predicted rate changes. If None, will generate new predictions
+            model_name (str): Name of model to evaluate (uses first model if None)
+            save_path (str): Path to save plot
+        """
+        if not self.models and predictions is None:
+            print("No models loaded and no predictions provided.")
+            return
+            
+        if 'Date' not in df.columns or rate_col not in df.columns:
+            print(f"DataFrame must include 'Date' and '{rate_col}' columns.")
+            return
+            
+        dates = df['Date']
+        actual_rates = df[rate_col]
+        
+        # Get predictions if not provided
+        if predictions is None:
+            if model_name is None:
+                model_name = list(self.models.keys())[0]
+                
+            if model_name not in self.models:
+                print(f"Model {model_name} not found.")
+                return
+                
+            model = self.models[model_name]
+            X = df.drop(columns=[change_col, 'Date'])
+            predictions = model.predict(X)
+        
+        # Convert predicted changes to predicted rates
+        # Shift actual rates forward by one week since predictions are for next week
+        predicted_rates = actual_rates.shift(1) + predictions
+        
+        # Create figure
+        plt.figure(figsize=(12, 6))
+        
+        # Plot actual and predicted rates
+        plt.plot(dates, actual_rates, 'b-', label='Actual Rate', alpha=0.7)
+        plt.plot(dates, predicted_rates, 'r--', label='Predicted Rate', alpha=0.7)
+        
+        title = '30-Year Fixed Mortgage Rates: Actual vs Predicted'
+        if model_name:
+            title += f'\n{model_name}'
+        plt.title(title)
+        plt.xlabel('Date')
+        plt.ylabel('Mortgage Rate (%)')
+        plt.legend()
+        plt.grid(True)
+        
+        # Rotate x-axis labels for better readability
+        plt.xticks(rotation=45)
+        
+        # Add text with error metrics
+        valid_mask = ~np.isnan(predicted_rates)
+        rmse = np.sqrt(mean_squared_error(actual_rates[valid_mask], predicted_rates[valid_mask]))
+        mae = mean_absolute_error(actual_rates[valid_mask], predicted_rates[valid_mask])
+        
+        stats_text = (
+            f'RMSE: {rmse:.2f}%\n'
+            f'MAE: {mae:.2f}%'
+        )
+        plt.text(0.02, 0.98, stats_text,
+                transform=plt.gca().transAxes,
+                verticalalignment='top',
+                bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
+        
+        plt.tight_layout()
+        
+        if save_path:
+            plt.savefig(save_path)
+            print(f"Plot saved to {save_path}")
+        else:
+            plt.show()
