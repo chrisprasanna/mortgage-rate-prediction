@@ -32,14 +32,14 @@ jobs:
         
     - name: Generate report
       run: |
-        python scripts/generate_email_report.py
+        python scripts/generate_report.py
         
     - name: Upload report and plots
       uses: actions/upload-artifact@v4
       with:
         name: weekly-mortgage-report
         path: |
-          email_report.html
+          release_report.html
           results/evaluation_metrics.csv
           results/plots/*.png
 
@@ -51,7 +51,7 @@ jobs:
       with:
         tag_name: mortgage-report-${{ env.REPORT_DATE }}
         name: "Mortgage Rate Report – ${{ env.REPORT_DATE }}"
-        body_path: email_report.html
+        body_path: release_report.html
         files: |
           results/evaluation_metrics.csv
           results/plots/*.png
